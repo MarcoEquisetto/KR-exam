@@ -1,0 +1,18 @@
+KR project ideas
+
+1. Academic organization ontology
+2. Healthcare/clinical ontology
+3. Smart home/IOT ontology
+4. E-commerce product ontology
+5. Cultural heritage/Museum ontology
+
+Minimum level of complexity (dependencies of concepts): 15
+Minimum number of roles and attributes: 40
+
+The number of constraints is what gives the project complexity, so as many as you can (to some degree).
+
+Process:
+Define the data, relations, and start implementing (top-down)
+
+
+- Written report or presentation
