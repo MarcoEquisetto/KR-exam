@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
@@ -10,28 +10,38 @@
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage{caption}
+\usepackage[margin=2.5cm]{geometry}
 
 % Page Layout
 \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
 
 % Professional Header Formatting
-\titleformat{\section}{\Large\bfseries\color{darkgray}}{\thesection}{1em}{}
-\titleformat{\subsection}{\large\bfseries\color{gray}}{\thesubsection}{1em}{}
+\titleformat{\section}{\Large\bfseries\color{black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{black}}{\thesubsection}{1em}{}
 
 % Code Listing Style
 \definecolor{codegray}{rgb}{0.95,0.95,0.95}
 \definecolor{codeblue}{rgb}{0.0,0.0,0.6}
 \lstset{
-    backgroundcolor=\color{codegray},
     basicstyle=\ttfamily\small,
-    breaklines=true,
-    keywordstyle=\color{codeblue},
+    keywordstyle=\color{blue},
     commentstyle=\color{gray},
     stringstyle=\color{red},
-    captionpos=b,
-    frame=single,
+    breaklines=true,
     numbers=left,
-    numberstyle=\tiny\color{gray}
+    numberstyle=\tiny,
+    frame=single,
+    tabsize=4,
+    captionpos=b
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Implementation of a Solver for the Union of Theories of Equality, Lists, and Arrays},
+    pdfauthor={Marco Equisetto}
 }
 
 % Title Page Data
@@ -39,10 +49,10 @@
     \vspace{2cm}
     \textbf{\huge Clinical Healthcare Ontology} \\
     \vspace{0.5cm}
-    \Large Knowledge Representation \& Reasoning Report
+    \Large Knowledge Representation
     \vspace{1.5cm}
 }
-\author{\textbf{Ontology Development Team} \\ University / Department Name}
+\author{\textbf{Equisetto Marco} \\ University of Verona / Department of Computer Science \\Artificial Intelligence}
 \date{\today}
 
 \begin{document}
@@ -55,13 +65,12 @@
 % Abstract
 % -------------------------------------------------------------------
 \begin{abstract}
-\noindent This report documents the design, implementation, and validation of a semantic ontology for the Clinical Healthcare domain. Developed using OWL 2 DL (Web Ontology Language), the system models complex hospital environments, including staff hierarchies, patient care workflows, and surgical requirements. 
+\noindent This report documents the design, implementation, and validation of a semantic ontology for a Clinical Healthcare domain. Developed using OWL 2 DL (Web Ontology Language), the system models complex hospital environments, including staff hierarchies, patient care workflows, and surgical requirements. 
 
 Key features include automated inference of patient criticality, strict cardinality constraints for surgical staffing (e.g., the "Two-Nurse Rule"), and the use of closure axioms to validate resource allocation. The ontology has been successfully tested using the HermiT and Pellet reasoners to verify consistency and identify logical contradictions in non-compliant data scenarios.
 \end{abstract}
 
 \tableofcontents
-\newpage
 
 % -------------------------------------------------------------------
 % Section 1: Introduction
