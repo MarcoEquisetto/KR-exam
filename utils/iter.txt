@@ -1,0 +1,25 @@
+Tests done to check reasoner consistency:
+
+TEST 1: Critical Patient 
+Tests inference logic
+
+- Create an ICU Department: IntensiveCareUnit -> ICU_Ward_1.
+- Data Property Assertion: bedCount -> 10 (integer).
+- Create a Patient: Patient -> John_Doe.
+- Object Property Assertion: admittedTo -> ICU_Ward_1.
+- Data Property Assertion: isCritical -> true (boolean).
+- Data Property Assertion: personID -> "12345" (string).
+
+----> TEST REASONER = Reasoner correctly derives that John_Doe is a CriticalPatient
+
+
+
+TEST 2: The "Surgery Validation"
+Tests strict cardinality/subclass constraints (e.g., that a surgery must have an anesthesiologist).
+
+- Create Staff: Surgeon -> Dr_Smith.
+- Create an Anesthesiologist: Dr_Jones.
+- Create a Nurse: Nurse_Betty.
+- Create a Surgery -> Heart_Transplant_001.
+- Object Property Assertion: performedBy -> Dr_Smith.
+- Data Property Assertion: surgeryDurationMinutes -> 240.

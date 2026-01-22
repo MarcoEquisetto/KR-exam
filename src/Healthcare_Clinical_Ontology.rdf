@@ -5,7 +5,8 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:untitled-ontology-2="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#">
     <owl:Ontology rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2"/>
     
 
@@ -30,9 +31,18 @@
     
 
 
-    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#assist -->
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#allergicTo -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#assist">
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#allergicTo">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Drug"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#assists -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#assists">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Doctor"/>
     </owl:ObjectProperty>
@@ -80,6 +90,16 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#employs">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Hospital"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Staff"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#hasMedicalRecord -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#hasMedicalRecord">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#MedicalRecord"/>
     </owl:ObjectProperty>
     
 
@@ -145,11 +165,20 @@
     
 
 
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#monitors -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#monitors">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#performedBy -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#performedBy">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgery"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgeon"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#MedicalProcedure"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#MedicalStaff"/>
     </owl:ObjectProperty>
     
 
@@ -186,6 +215,16 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#scheduledFor">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Appointment"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#supervises -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#supervises">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Staff"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Staff"/>
     </owl:ObjectProperty>
     
 
@@ -370,6 +409,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#isActivePrescription -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#isActivePrescription">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Prescription"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#isCritical -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#isCritical">
@@ -406,6 +454,15 @@
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#roomNumber">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Inpatient"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#severityLevel -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#severityLevel">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Diagnosis"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
     </owl:DatatypeProperty>
     
 
@@ -465,6 +522,12 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Anesthesiologist">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Doctor"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#performsProcedure"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgery"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -481,6 +544,15 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Appointment">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Encounter"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#EmergencyVisit"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#AssistantNurse -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#AssistantNurse">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
     </owl:Class>
     
 
@@ -502,6 +574,28 @@
     <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#ClinicalEvent -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#ClinicalEvent"/>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#CriticalPatient -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#CriticalPatient">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#admittedTo"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#IntensiveCareUnit"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#isCritical"/>
+                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasValue>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
     
 
 
@@ -599,6 +693,12 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#EmergencyVisit">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Encounter"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#locatedIn"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#EmergencyRoom"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -627,10 +727,16 @@
     
 
 
-    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Headnurse -->
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#HeadNurse -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Headnurse">
+    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#HeadNurse">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#supervises"/>
+                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -737,6 +843,13 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Person"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#hasMedicalRecord"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#MedicalRecord"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#bloodType"/>
@@ -853,6 +966,13 @@
                 <owl:onClass rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgeon"/>
             </owl:Restriction>
         </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#performedBy"/>
+                <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
+                <owl:onClass rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -873,10 +993,18 @@
     
 
 
-    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#UrinTest -->
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#UrineTest -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#UrinTest">
+    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#UrineTest">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#DiagnosticTest"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Vitamin -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Vitamin">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Drug"/>
     </owl:Class>
     
 
@@ -886,6 +1014,245 @@
     <owl:Class rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#XRay">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#DiagnosticTest"/>
     </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Brain_Surgery_X99 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Brain_Surgery_X99">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgery"/>
+        <rdf:type>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#usesEquipment"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:oneOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgical_Laser_1"/>
+                        </owl:oneOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdf:type>
+        <rdf:type>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#performedBy"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:oneOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Jones"/>
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Smith"/>
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Karen"/>
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Matteo"/>
+                        </owl:oneOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdf:type>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Jones -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Jones">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Anesthesiologist"/>
+        <owl:differentFrom rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Smith"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Smith -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Smith">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgeon"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Heart_Transplant_001 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Heart_Transplant_001">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgery"/>
+        <rdf:type>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#performedBy"/>
+                <owl:allValuesFrom>
+                    <owl:Class>
+                        <owl:oneOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Jones"/>
+                            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Dr_Smith"/>
+                        </owl:oneOf>
+                    </owl:Class>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdf:type>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#ICU_Ward_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#ICU_Ward_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#IntensiveCareUnit"/>
+        <untitled-ontology-2:bedCount rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal">10</untitled-ontology-2:bedCount>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#John_Doe -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#John_Doe">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient"/>
+        <owl:differentFrom rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient_Zero"/>
+        <untitled-ontology-2:admittedTo rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#ICU_Ward_1"/>
+        <untitled-ontology-2:isCritical rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</untitled-ontology-2:isCritical>
+        <untitled-ontology-2:personID>12345</untitled-ontology-2:personID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Betty -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Betty">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Karen -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Karen">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Linda -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Linda">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Matteo -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Matteo">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Ratched -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Ratched">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#HeadNurse"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse"/>
+        <untitled-ontology-2:supervises rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Betty"/>
+        <untitled-ontology-2:shiftHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</untitled-ontology-2:shiftHours>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient_Zero -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Patient_Zero">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Outpatient"/>
+        <untitled-ontology-2:allergicTo rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Penicillin_V"/>
+        <untitled-ontology-2:personID>99999</untitled-ontology-2:personID>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Penicillin_V -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Penicillin_V">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Antibiotic"/>
+        <untitled-ontology-2:drugName>Penicillin V Potassium</untitled-ontology-2:drugName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgical_Laser_1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgical_Laser_1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#SurgicalTool"/>
+        <untitled-ontology-2:equipmentStatus>Operational</untitled-ontology-2:equipmentStatus>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Analgesic"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Antibiotic"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Vitamin"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Anesthesiologist"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#GeneralPractitioner"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Surgeon"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#BloodTest"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#MRI"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#UrineTest"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#XRay"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Diagnosis"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#MedicalRecord"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Prescription"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#EmergencyRoom"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#IntensiveCareUnit"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Pharmacy"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#SurgeryWard"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Betty"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Karen"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Linda"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Matteo"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/marco/ontologies/2026/0/untitled-ontology-2#Nurse_Ratched"/>
+        </owl:distinctMembers>
+    </rdf:Description>
 </rdf:RDF>
 
 
