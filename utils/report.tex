@@ -1,27 +1,28 @@
-\documentclass[a4paper,11pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{geometry}
-\usepackage{titlesec}
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
 \usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{caption}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{microtype}
 \usepackage{hyperref}
-\usepackage{booktabs}
+\usepackage[parfill]{parskip}
 \usepackage{float}
-\usepackage{caption}
-\usepackage[margin=2.5cm]{geometry}
 
-% Page Layout
-\geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+% Hyperlink configuration
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue,
+    pdftitle={Clinical Healthcare Ontology},
+    pdfauthor={Marco Equisetto}
+}
 
-% Professional Header Formatting
-\titleformat{\section}{\Large\bfseries\color{black}}{\thesection}{1em}{}
-\titleformat{\subsection}{\large\bfseries\color{black}}{\thesubsection}{1em}{}
-
-% Code Listing Style
-\definecolor{codegray}{rgb}{0.95,0.95,0.95}
-\definecolor{codeblue}{rgb}{0.0,0.0,0.6}
+% Listings configuration (Adapted for XML/OWL)
 \lstset{
     basicstyle=\ttfamily\small,
     keywordstyle=\color{blue},
@@ -32,124 +33,90 @@
     numberstyle=\tiny,
     frame=single,
     tabsize=4,
-    captionpos=b
+    captionpos=b,
+    language=XML,
+    morekeywords={owl:Class, owl:Restriction, owl:onProperty, owl:minQualifiedCardinality, owl:onClass, owl:equivalentClass, owl:intersectionOf, rdf:Description, rdfs:subClassOf}
 }
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    citecolor=blue,
-    urlcolor=blue,
-    pdftitle={Implementation of a Solver for the Union of Theories of Equality, Lists, and Arrays},
-    pdfauthor={Marco Equisetto}
-}
-
-% Title Page Data
-\title{
-    \vspace{2cm}
-    \textbf{\huge Clinical Healthcare Ontology} \\
-    \vspace{0.5cm}
-    \Large Knowledge Representation
-    \vspace{1.5cm}
-}
-\author{\textbf{Equisetto Marco} \\ University of Verona / Department of Computer Science \\Artificial Intelligence}
+\title{\textbf{Clinical Healthcare Ontology} \\
+       \large Artificial Intelligence Master Degree \\
+       \textbf{Knowledge Representation}}
+\author{Marco Equisetto \\ University of Verona}
 \date{\today}
 
 \begin{document}
 
 \maketitle
-\thispagestyle{empty}
-\newpage
 
-% -------------------------------------------------------------------
-% Abstract
-% -------------------------------------------------------------------
 \begin{abstract}
-\noindent This report documents the design, implementation, and validation of a semantic ontology for a Clinical Healthcare domain. Developed using OWL 2 DL (Web Ontology Language), the system models complex hospital environments, including staff hierarchies, patient care workflows, and surgical requirements. 
+This report documents the design, implementation, and logical validation of a semantic ontology for the Clinical Healthcare domain. Developed using \textbf{OWL 2 DL}, the system models hospital environments, including staff hierarchies, patient care workflows, and surgical requirements.
 
-Key features include automated inference of patient criticality, strict cardinality constraints for surgical staffing (e.g., the "Two-Nurse Rule"), and the use of closure axioms to validate resource allocation. The ontology has been successfully tested using the HermiT and Pellet reasoners to verify consistency and identify logical contradictions in non-compliant data scenarios.
+Key features include the automated inference of patient risk status (e.g., \texttt{CriticalPatient}), hierarchical staffing constraints (e.g., \texttt{SeniorSurgeon}), and strict safety protocols such as the "Two-Nurse Rule" for surgeries. The ontology utilizes over 40 semantic properties and has been validated using the HermiT reasoner.
 \end{abstract}
 
 \tableofcontents
+\newpage
 
-% -------------------------------------------------------------------
-% Section 1: Introduction
-% -------------------------------------------------------------------
 \section{Introduction}
-Modern healthcare systems require robust data modeling to ensure patient safety and operational efficiency. This project aims to create a formal ontology that acts not just as a database schema, but as an intelligent logic layer capable of validating clinical events.
+This project aims to create a formal ontology that acts not merely as a database schema, but as an intelligent logic structure that can be then given to an AI model and inferred upon.
 
-The ontology was developed in \textbf{Protégé 5.6} and addresses the following competency questions:
-\begin{itemize}
-    \item Which patients are currently in a critical condition?
-    \item Does a specific surgery meet the mandatory staffing requirements (Surgeons, Anesthesiologists, and Nurses)?
-    \item Are clinical resource allocations (e.g., ICU beds) consistent with patient assignments?
-\end{itemize}
+The ontology addresses the following \textbf{Competency Questions}:
+\begin{enumerate}
+    \item \textbf{Safety Compliance:} Does a specific surgery meet mandatory staffing requirements (e.g., presence of a Surgeon, Anesthesiologist, and at least two Nurses)?
+    \item \textbf{Risk Stratification:} Which patients are currently in a "Critical" state based on their department admission and vitals?
+    \item \textbf{Resource Verification:} Are medical procedures assigned to the correct staff specializations?
+\end{enumerate}
 
-% -------------------------------------------------------------------
-% Section 2: Ontology Architecture
-% -------------------------------------------------------------------
-\section{Ontology Architecture}
-The ontology follows a top-down taxonomic structure rooted in \texttt{owl:Thing}, designed to ensure high dependency complexity (depth $>$ 5).
+\section{Ontology Structure (Taxonomy)}
+The ontology follows a top-down taxonomic structure rooted in \texttt{owl:Thing}. It features a hierarchy depth greater than 5 levels, ensuring high dependency complexity.
 
-\subsection{Class Hierarchy}
-The core hierarchy distinguishes between actors, events, and assets:
-\begin{itemize}
-    \item \textbf{Person}: The superclass for all human actors.
-    \begin{itemize}
-        \item \textbf{Patient}: Further specialized into \texttt{Inpatient} and \texttt{Outpatient}[cite: 36, 40].
-        \item \textbf{Staff}: Subdivided into \texttt{AdministrativeStaff} and \texttt{MedicalStaff}[cite: 39].
-    \end{itemize}
-    \item \textbf{ClinicalEvent}: Covers temporal occurrences such as \texttt{Encounter} (visits) and \texttt{MedicalProcedure} (surgeries, diagnostic tests)[cite: 23].
-    \item \textbf{Organization}: Includes \texttt{Hospital} and various \texttt{Department} subclasses like \texttt{EmergencyRoom} and \texttt{IntensiveCareUnit}[cite: 27].
-\end{itemize}
+\subsection{Hierarchy}
+\begin{figure}[H]
+    \centering
+    % Placeholder for image file
+    \includegraphics[width=0.7\textwidth]{higherarchy.png}
+    \caption{Hierarchy of Taxonomy}
+    \label{fig:hierarchy}
+\end{figure}
 
 \subsection{Disjointness Axioms}
-To prevent logical errors (e.g., a person being both a Doctor and a Nurse), strict disjointness axioms were applied:
-\begin{itemize}
-    \item \texttt{Doctor} $\sqcap$ \texttt{Nurse} $\equiv \bot$ [cite: 31]
-    \item \texttt{Inpatient} $\sqcap$ \texttt{Outpatient} $\equiv \bot$ [cite: 37]
-    \item \texttt{DiagnosticTest} subclasses (MRI, X-Ray, BloodTest) are mutually disjoint[cite: 68].
-\end{itemize}
+To prevent logical errors, strict disjointness axioms were applied. For example, the class \texttt{Doctor} is disjoint from \texttt{Nurse}, ensuring no individual can hold both roles simultaneously. Similarly, \texttt{Inpatient} and \texttt{Outpatient} are mutually exclusive.
 
-% -------------------------------------------------------------------
-% Section 3: Property Definitions
-% -------------------------------------------------------------------
 \section{Property Definitions}
-The semantic expressivity of the ontology relies on over 40 defined properties.
+The ontology employs over 40 properties to define relationships and attributes.
 
 \subsection{Object Properties (Roles)}
+Object properties define relationships between class instances.
+
 \begin{table}[H]
 \centering
 \begin{tabular}{@{}llp{6cm}@{}}
 \toprule
 \textbf{Property} & \textbf{Characteristics} & \textbf{Description} \\ \midrule
-\texttt{prescribes} & Domain: Doctor & Links a doctor to a prescription[cite: 9]. \\
-\texttt{performedBy} & Domain: Procedure & Crucial for validating staffing constraints[cite: 8]. \\
-\texttt{supervises} & Transitive & Models hierarchical staff management[cite: 10]. \\
-\texttt{admittedTo} & Domain: Patient & Links patients to departments[cite: 2]. \\
+\texttt{performedBy} & Domain: Procedure & Links procedures to staff; crucial for validation rules. \\
+\texttt{supervises} & Transitive & Models hierarchical staff management (A supervises B, B supervises C $\rightarrow$ A supervises C). \\
+\texttt{treats} & Inverse (isTreatedBy) & Connects \texttt{MedicalStaff} to \texttt{Patient}. \\
+\texttt{admittedTo} & Domain: Patient & Specifies the department (e.g., ICU) where a patient resides. \\
 \bottomrule
 \end{tabular}
 \caption{Key Object Properties}
 \end{table}
 
 \subsection{Data Properties (Attributes)}
-Attributes capture literal data values necessary for computation:
+Attributes capture literal values used for logical computation:
 \begin{itemize}
-    \item \textbf{\texttt{surgeryDurationMinutes}}: Used to track procedure length[cite: 19].
-    \item \textbf{\texttt{isCritical}}: A Boolean flag driving inference rules[cite: 17].
-    \item \textbf{\texttt{bedCount}}: Defines capacity for departments[cite: 13].
+    \item \textbf{\texttt{surgeryDurationMinutes}}: Used to infer if a surgery is "High Risk".
+    \item \textbf{\texttt{isCritical}}: A Boolean flag driving patient status inference.
+    \item \textbf{\texttt{yearsOfExperience}}: Integer used to classify senior staff.
 \end{itemize}
 
-% -------------------------------------------------------------------
-% Section 4: Logic and Constraints
-% -------------------------------------------------------------------
-\section{Logic and Reasoning}
-This section details the Description Logic (DL) axioms that enforce domain rules.
+\section{Logical Constraints \& Reasoning}
+This section details the Description Logic (DL) axioms that provide the ontology with its "intelligence."
 
-\subsection{The "Two-Nurse" Rule}
-A significant constraint was added to the \texttt{Surgery} class to ensure safety standards. The axiom states that every surgery must be performed by at least two nurses, in addition to a surgeon and an anesthesiologist.
+\subsection{The "Two-Nurse" Rule (Safety Constraint)}
+A strict constraint was added to the \texttt{Surgery} class. The axiom mandates that every surgery must be performed by \textbf{at least two} nurses, in addition to a surgeon and anesthesiologist.
 
-\begin{lstlisting}[language=xml, caption={OWL Restriction for Surgery Staffing}]
+\begin{lstlisting}[caption={OWL Restriction for Surgery Staffing}]
 <owl:Class rdf:about="...#Surgery">
     <rdfs:subClassOf>
         <owl:Restriction>
@@ -160,51 +127,47 @@ A significant constraint was added to the \texttt{Surgery} class to ensure safet
     </rdfs:subClassOf>
 </owl:Class>
 \end{lstlisting}
-\noindent \textit{Source: Ontology File, Lines 51-52}.
+\textit{Source: Ontology File, Lines 68-69.}
 
-\subsection{Critical Patient Inference}
-We defined \texttt{CriticalPatient} as an \textit{Equivalent Class} rather than a manual category. The reasoner automatically classifies any individual meeting these criteria:
-\[ Patient \equiv Person \sqcap \exists admittedTo.IntensiveCareUnit \sqcap \exists isCritical.\{true\} \]
-This ensures that any patient in the ICU flagged as critical is immediately recognized as a high-priority case [cite: 24-26].
+\subsection{Automated Inference (Defined Classes)}
+We implemented \texttt{owl:equivalentClass} definitions to allow the reasoner to automatically classify individuals based on data patterns.
 
-% -------------------------------------------------------------------
-% Section 5: Validation and Testing
-% -------------------------------------------------------------------
+\begin{enumerate}
+    \item \textbf{CriticalPatient}: The reasoner automatically classifies a patient as "Critical" if they are admitted to the ICU \textbf{AND} have the \texttt{isCritical} flag set to true.
+    \[ \text{Patient} \sqcap \exists \text{admittedTo.ICU} \sqcap \exists \text{isCritical.\{true\}} \]
+
+    \item \textbf{SeniorSurgeon}: Any surgeon with 15 or more years of experience is automatically reclassified as a Senior Surgeon.
+    \[ \text{Surgeon} \sqcap \text{yearsOfExperience} \ge 15 \]
+
+    \item \textbf{HighRiskSurgery}: Any surgery lasting longer than 300 minutes is flagged as High Risk.
+\end{enumerate}
+
 \section{Validation and Testing}
-The ontology was validated using the HermiT reasoner. We instantiated specific scenarios to test the Open World Assumption (OWA) and closure axioms.
+The ontology was populated with diverse individuals to test the Open World Assumption (OWA) and strict validation rules.
 
-\subsection{Scenario A: Compliant Surgery (Brain\_Surgery\_X99)}
-\textbf{Setup:} An instance of \texttt{Surgery} was created with the following \texttt{performedBy} assertions:
-\begin{itemize}
-    \item \texttt{Dr\_Smith} (Surgeon) [cite: 57]
-    \item \texttt{Dr\_Jones} (Anesthesiologist) [cite: 56]
-    \item \texttt{Nurse\_Karen} (Nurse) [cite: 57]
-    \item \texttt{Nurse\_Matteo} (Nurse) [cite: 58]
-\end{itemize}
-\textbf{Result:} The reasoner validated this instance as \textbf{Consistent}. The presence of two distinct nurses (\texttt{Nurse\_Karen} and \texttt{Nurse\_Matteo}) satisfied the `min 2 Nurse` cardinality constraint.
+\subsection{Scenario A: Compliant Surgery}
+\textbf{Instance:} \texttt{Brain\_Surgery\_X99} \\
+\textbf{Setup:} Linked to \texttt{Dr\_Smith} (Surgeon), \texttt{Dr\_Jones} (Anesthesiologist), \texttt{Nurse\_Karen}, and \texttt{Nurse\_Matteo}. \\
+\textbf{Result:} The reasoner validated this instance as \textbf{Consistent}. The presence of two distinct nurses satisfied the \texttt{min 2 Nurse} cardinality constraint.
 
-\subsection{Scenario B: Non-Compliant Surgery (Heart\_Transplant\_001)}
-\textbf{Setup:} This instance was asserted with a \textit{Closure Axiom} stating that \textbf{only} the following staff were present:
-\begin{itemize}
-    \item \texttt{Dr\_Smith} (Surgeon)
-    \item \texttt{Dr\_Jones} (Anesthesiologist)
-\end{itemize}
+\subsection{Scenario B: Non-Compliant Surgery Check}
+\textbf{Instance:} \texttt{Heart\_Transplant\_001} \\
+\textbf{Setup:} Asserted with a \textit{Closure Axiom} stating \textbf{only} \texttt{Dr\_Smith} and \texttt{Dr\_Jones} were present. \\
 \textbf{Logic Trace:}
 \begin{enumerate}
     \item The class \texttt{Surgery} requires min 2 \texttt{Nurse} instances.
-    \item The individual \texttt{Heart\_Transplant\_001} explicitly lists only Doctors in its closure axiom [cite: 60-61].
-    \item The disjointness axiom (`Doctor` vs `Nurse`) confirms neither Smith nor Jones is a Nurse[cite: 31].
+    \item The individual lists only Doctors in its closure axiom.
+    \item \textbf{Result:} The reasoner triggered an \textbf{Inconsistency Error}, successfully verifying the safety rule.
 \end{enumerate}
-\textbf{Result:} The reasoner successfully triggered an \textbf{Inconsistency Error}, proving the validation logic is functioning correctly.
 
-\subsection{Scenario C: Critical Inference (John\_Doe)}
-\textbf{Setup:} \texttt{John\_Doe} was asserted as a Patient admitted to \texttt{ICU\_Ward\_1} with \texttt{isCritical = true}[cite: 63].
-\textbf{Result:} Upon synchronization, the reasoner inferred \texttt{John\_Doe} to be of type \texttt{CriticalPatient}, validating the defined class logic.
+\subsection{Scenario C: Inference Logic}
+\begin{itemize}
+    \item \textbf{Seniority Test:} \texttt{Dr\_House} (Experience: 20) was correctly inferred as type \texttt{SeniorSurgeon}.
+    \item \textbf{Pediatric Test:} \texttt{Patient\_Timmy} (Age: 8) was correctly inferred as type \texttt{PediatricPatient}.
+    \item \textbf{Risk Test:} \texttt{Complex\_Bypass\_001} (Duration: 450 min) was correctly inferred as type \texttt{HighRiskSurgery}.
+\end{itemize}
 
-% -------------------------------------------------------------------
-% Section 6: Conclusion
-% -------------------------------------------------------------------
 \section{Conclusion}
-The developed Clinical Healthcare Ontology successfully meets the complexity requirements of the project. It features a deep taxonomy, over 40 semantic properties, and rigorous logic constraints including cardinality, disjointness, and property transitivity. The successful validation of the "Two-Nurse Rule" and critical patient inference demonstrates the ontology's utility in automated clinical decision support.
+The developed Clinical Healthcare Ontology successfully meets the project complexity requirements. It features a deep taxonomy, over 40 semantic properties, and rigorous logic constraints including cardinality, disjointness, and property transitivity. The successful validation of the "Two-Nurse Rule" and the automated inference of patient risk demonstrate the ontology's utility in automated clinical decision support systems.
 
 \end{document}
