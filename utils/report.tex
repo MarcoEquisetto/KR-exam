@@ -35,7 +35,7 @@
     tabsize=4,
     captionpos=b,
     language=XML,
-    morekeywords={owl:Class, owl:Restriction, owl:onProperty, owl:minQualifiedCardinality, owl:onClass, owl:equivalentClass, owl:intersectionOf, rdf:Description, rdfs:subClassOf}
+    morekeywords={owl:Class, owl:Restriction, owl:onProperty, owl:minQualifiedCardinality, owl:onClass, owl:equivalentClass, owl:intersectionOf, rdf:Description, rdfs:subClassOf, owl:allValuesFrom, owl:someValuesFrom, owl:hasValue}
 }
 
 \title{\textbf{Clinical Healthcare Ontology} \\
@@ -49,41 +49,46 @@
 \maketitle
 
 \begin{abstract}
-This report documents the design, implementation, and logical validation of a semantic ontology for the Clinical Healthcare domain. Developed using \textbf{OWL 2 DL}, the system models hospital environments, including staff hierarchies, patient care workflows, and surgical requirements.
-
-Key features include the automated inference of patient risk status (e.g., \texttt{CriticalPatient}), hierarchical staffing constraints (e.g., \texttt{SeniorSurgeon}), and strict safety protocols such as the "Two-Nurse Rule" for surgeries. The ontology utilizes over 40 semantic properties and has been validated using the HermiT reasoner.
+This report documents the design, implementation, and logical validation of a semantic ontology for the Clinical Healthcare domain. Developed using \textbf{OWL 2 DL}, the system models complex hospital environments, including staff hierarchies, patient care workflows, pharmaceutical management, and procedural safety protocols. Key features include the automated inference of patient risk status (e.g., \texttt{CriticalPatient}), hierarchical staffing constraints (e.g., \texttt{HeadNurse}, \texttt{SeniorSurgeon}), and strict safety protocols distinguishing between \texttt{Surgery} and \texttt{Vaccination} workflows. The ontology utilizes over 40 semantic properties, includes drug allergy tracking, and has been validated using the HermiT reasoner.
 \end{abstract}
 
 \tableofcontents
 \newpage
 
 \section{Introduction}
-This project aims to create a formal ontology that acts not merely as a database schema, but as an intelligent logic structure that can be then given to an AI model and inferred upon.
+This project aims to create a formal ontology that acts not merely as a database schema, but as an intelligent logic structure capable of automated inference. The ontology addresses the following \textbf{Competency Questions}:
 
-The ontology addresses the following \textbf{Competency Questions}:
 \begin{enumerate}
     \item \textbf{Safety Compliance:} Does a specific surgery meet mandatory staffing requirements (e.g., presence of a Surgeon, Anesthesiologist, and at least two Nurses)?
     \item \textbf{Risk Stratification:} Which patients are currently in a "Critical" state based on their department admission and vitals?
-    \item \textbf{Resource Verification:} Are medical procedures assigned to the correct staff specializations?
+    \item \textbf{Pharmaceutical Safety:} Is a patient prescribed drugs to which they have a recorded allergy?
+    \item \textbf{Resource Verification:} Are medical procedures assigned to the correct staff specializations (e.g., Nurses for vaccinations vs. multi-disciplinary teams for surgery)?
 \end{enumerate}
 
 \section{Ontology Structure (Taxonomy)}
 The ontology follows a top-down taxonomic structure rooted in \texttt{owl:Thing}. It features a hierarchy depth greater than 5 levels, ensuring high dependency complexity.
 
 \subsection{Hierarchy}
+The class structure differentiates between \texttt{Person} (subdivided into \texttt{Staff} and \texttt{Patient}), \texttt{ClinicalEvent} (including \texttt{Surgery} and \texttt{Vaccination}), and \texttt{MedicalAsset} (including \texttt{Pharmaceuticals} and \texttt{Equipment}).
+
 \begin{figure}[H]
     \centering
-    % Placeholder for image file
+    % Placeholder for image file as requested
     \includegraphics[width=0.7\textwidth]{higherarchy.png}
     \caption{Hierarchy of Taxonomy}
     \label{fig:hierarchy}
 \end{figure}
 
 \subsection{Disjointness Axioms}
-To prevent logical errors, strict disjointness axioms were applied. For example, the class \texttt{Doctor} is disjoint from \texttt{Nurse}, ensuring no individual can hold both roles simultaneously. Similarly, \texttt{Inpatient} and \texttt{Outpatient} are mutually exclusive.
+To prevent logical errors, strict disjointness axioms were applied:
+\begin{itemize}
+    \item \textbf{Roles:} The class \texttt{Doctor} is disjoint from \texttt{Nurse}. Within the \texttt{Doctor} class, \texttt{Anesthesiologist}, \texttt{GeneralPractitioner}, and \texttt{Surgeon} are mutually disjoint.
+    \item \textbf{Patients:} \texttt{Inpatient} and \texttt{Outpatient} are mutually exclusive.
+    \item \textbf{Pharmaceuticals:} \texttt{Antibiotic}, \texttt{Analgesic}, and \texttt{Vitamin} are defined as disjoint classes to prevent misclassification of drugs.
+\end{itemize}
 
 \section{Property Definitions}
-The ontology employs over 40 properties to define relationships and attributes.
+The ontology employs a robust set of properties to define relationships and attributes.
 
 \subsection{Object Properties (Roles)}
 Object properties define relationships between class instances.
@@ -94,9 +99,10 @@ Object properties define relationships between class instances.
 \toprule
 \textbf{Property} & \textbf{Characteristics} & \textbf{Description} \\ \midrule
 \texttt{performedBy} & Domain: Procedure & Links procedures to staff; crucial for validation rules. \\
-\texttt{supervises} & Transitive & Models hierarchical staff management (A supervises B, B supervises C $\rightarrow$ A supervises C). \\
-\texttt{treats} & Inverse (isTreatedBy) & Connects \texttt{MedicalStaff} to \texttt{Patient}. \\
+\texttt{supervises} & Transitive & Models hierarchical staff management (e.g., \texttt{HeadNurse} supervises \texttt{Nurse}). \\
+\texttt{allergicTo} & Domain: Patient & Links a patient to a specific \texttt{Drug} instance (e.g., Penicillin). \\
 \texttt{admittedTo} & Domain: Patient & Specifies the department (e.g., ICU) where a patient resides. \\
+\texttt{usesEquipment} & Domain: Procedure & Links procedures to required tools (e.g., \texttt{SurgicalTool}). \\
 \bottomrule
 \end{tabular}
 \caption{Key Object Properties}
@@ -108,13 +114,19 @@ Attributes capture literal values used for logical computation:
     \item \textbf{\texttt{surgeryDurationMinutes}}: Used to infer if a surgery is "High Risk".
     \item \textbf{\texttt{isCritical}}: A Boolean flag driving patient status inference.
     \item \textbf{\texttt{yearsOfExperience}}: Integer used to classify senior staff.
+    \item \textbf{\texttt{bedCount}}: Defines capacity for departments like the ICU.
 \end{itemize}
 
 \section{Logical Constraints \& Reasoning}
 This section details the Description Logic (DL) axioms that provide the ontology with its "intelligence."
 
-\subsection{The "Two-Nurse" Rule (Safety Constraint)}
-A strict constraint was added to the \texttt{Surgery} class. The axiom mandates that every surgery must be performed by \textbf{at least two} nurses, in addition to a surgeon and anesthesiologist.
+\subsection{Procedural Staffing Constraints}
+We implemented distinct cardinality constraints for different medical procedures:
+
+\newpage
+
+\subsubsection{The "Two-Nurse" Rule (Surgery)}
+A strict constraint was added to the \texttt{Surgery} class. The axiom mandates that every surgery must be performed by \textbf{at least two} nurses, in addition to a surgeon and an anesthesiologist.
 
 \begin{lstlisting}[caption={OWL Restriction for Surgery Staffing}]
 <owl:Class rdf:about="...#Surgery">
@@ -127,7 +139,14 @@ A strict constraint was added to the \texttt{Surgery} class. The axiom mandates 
     </rdfs:subClassOf>
 </owl:Class>
 \end{lstlisting}
-\textit{Source: Ontology File, Lines 68-69.}
+
+\subsubsection{Vaccination Protocols}
+Unlike surgery, the \texttt{Vaccination} class is defined with a lighter constraint, requiring \textbf{at least one} nurse and the use of specific \texttt{SurgicalTool} equipment.
+
+\subsection{Staff Hierarchy (Head Nurse)}
+The \texttt{HeadNurse} class is defined not just as a subclass of \texttt{Nurse}, but through a property restriction:
+\[ \text{HeadNurse} \equiv \text{Nurse} \sqcap \exists \text{supervises.Nurse} \]
+This ensures that any nurse supervising another nurse is automatically classified as a Head Nurse.
 
 \subsection{Automated Inference (Defined Classes)}
 We implemented \texttt{owl:equivalentClass} definitions to allow the reasoner to automatically classify individuals based on data patterns.
@@ -143,31 +162,44 @@ We implemented \texttt{owl:equivalentClass} definitions to allow the reasoner to
 \end{enumerate}
 
 \section{Validation and Testing}
-The ontology was populated with diverse individuals to test the Open World Assumption (OWA) and strict validation rules.
+The ontology was populated with diverse individuals (ABox) to test the Open World Assumption (OWA) and strict validation rules.
 
-\subsection{Scenario A: Compliant Surgery}
+\subsection{Scenario A: Compliant Surgery Execution}
 \textbf{Instance:} \texttt{Brain\_Surgery\_X99} \\
-\textbf{Setup:} Linked to \texttt{Dr\_Smith} (Surgeon), \texttt{Dr\_Jones} (Anesthesiologist), \texttt{Nurse\_Karen}, and \texttt{Nurse\_Matteo}. \\
-\textbf{Result:} The reasoner validated this instance as \textbf{Consistent}. The presence of two distinct nurses satisfied the \texttt{min 2 Nurse} cardinality constraint.
+\textbf{Setup:} This surgery is explicitly linked to:
+\begin{itemize}
+    \item \texttt{Dr\_Smith} (Surgeon) and \texttt{Dr\_Jones} (Anesthesiologist)
+    \item \texttt{Nurse\_Karen} and \texttt{Nurse\_Matteo}
+    \item Equipment: \texttt{Surgical\_Laser\_1}
+\end{itemize}
+\textbf{Result:} The reasoner validated this instance as \textbf{Consistent}. The presence of two distinct nurses and the requisite medical staff satisfied the complex cardinality constraints of the \texttt{Surgery} class.
 
-\subsection{Scenario B: Non-Compliant Surgery Check}
+\subsection{Scenario B: Complex Staffing \& Hierarchy Check}
 \textbf{Instance:} \texttt{Heart\_Transplant\_001} \\
-\textbf{Setup:} Asserted with a \textit{Closure Axiom} stating \textbf{only} \texttt{Dr\_Smith} and \texttt{Dr\_Jones} were present. \\
+\textbf{Setup:} This high-complexity instance involves \texttt{Dr\_Smith}, \texttt{Dr\_Jones}, \texttt{Nurse\_Betty}, and \texttt{Nurse\_Linda}. \\
+\textbf{Inference:} Additionally, \texttt{Nurse\_Ratched} is defined as supervising \texttt{Nurse\_Betty}. The reasoner successfully infers \texttt{Nurse\_Ratched} as type \texttt{HeadNurse} due to the existence of the `supervises` relationship, validating the hierarchical logic without manual type assertion.
+
+\subsection{Scenario C: Pharmaceutical Allergy Tracking}
+\textbf{Instance:} \texttt{Patient\_Zero} \\
+\textbf{Setup:} Defined as an \texttt{Outpatient} with the property \texttt{allergicTo} pointing to \texttt{Penicillin\_V}. \\
 \textbf{Logic Trace:}
 \begin{enumerate}
-    \item The class \texttt{Surgery} requires min 2 \texttt{Nurse} instances.
-    \item The individual lists only Doctors in its closure axiom.
-    \item \textbf{Result:} The reasoner triggered an \textbf{Inconsistency Error}, successfully verifying the safety rule.
+    \item \texttt{Penicillin\_V} is classified as an \texttt{Antibiotic}.
+    \item The ontology successfully links the patient to the allergen.
+    \item This structure enables safety queries (e.g., "Find all patients allergic to Antibiotics") to return \texttt{Patient\_Zero} correctly.
 \end{enumerate}
 
-\subsection{Scenario C: Inference Logic}
+\subsection{Scenario D: Inference Logic & Risk Classification}
 \begin{itemize}
-    \item \textbf{Seniority Test:} \texttt{Dr\_House} (Experience: 20) was correctly inferred as type \texttt{SeniorSurgeon}.
+    \item \textbf{Seniority Test:} \texttt{Dr\_House} (Experience: 20 years) was correctly inferred as type \texttt{SeniorSurgeon}.
     \item \textbf{Pediatric Test:} \texttt{Patient\_Timmy} (Age: 8) was correctly inferred as type \texttt{PediatricPatient}.
-    \item \textbf{Risk Test:} \texttt{Complex\_Bypass\_001} (Duration: 450 min) was correctly inferred as type \texttt{HighRiskSurgery}.
+    \item \textbf{High Risk Surgery:} \texttt{Complex\_Bypass\_001} (Duration: 450 min) was correctly inferred as type \texttt{HighRiskSurgery}.
+    \item \textbf{Vaccination Check:} \texttt{School\_Vax\_03} was validated as a consistent \texttt{Vaccination} event, performed by \texttt{Nurse\_Linda} on \texttt{Patient\_Timmy}.
 \end{itemize}
 
 \section{Conclusion}
-The developed Clinical Healthcare Ontology successfully meets the project complexity requirements. It features a deep taxonomy, over 40 semantic properties, and rigorous logic constraints including cardinality, disjointness, and property transitivity. The successful validation of the "Two-Nurse Rule" and the automated inference of patient risk demonstrate the ontology's utility in automated clinical decision support systems.
+The developed Clinical Healthcare Ontology successfully meets the project complexity requirements. It features a deep taxonomy distinguishing between various medical events and assets, over 40 semantic properties, and rigorous logic constraints.
+
+The successful validation of the "Two-Nurse Rule" for surgeries, the distinct protocol for vaccinations, and the automated handling of staff hierarchies (Head Nurse) and patient risks demonstrate the ontology's capability to support automated clinical decision-making.
 
 \end{document}
